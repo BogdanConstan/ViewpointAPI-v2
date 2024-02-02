@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace ViewpointAPI.Models;
 
@@ -8,14 +9,23 @@ public class Data
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
+    public string Id { get; set; }
 
-    [BsonElement("Name")]
-    public string BookName { get; set; } = null!;
+    [BsonElement("identifier")]
+    [JsonPropertyName("Identifier")]
+    public string Identifier { get; set; }
 
-    public decimal Price { get; set; }
+    [BsonElement("field")]
+    public string Field { get; set; }
 
-    public string Category { get; set; } = null!;
+    [BsonElement("timestamp")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime Timestamp { get; set; }
 
-    public string Author { get; set; } = null!;
+    [BsonElement("value")]
+    public double Value { get; set; }
+
+    [BsonElement("modified")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime Modified { get; set; }
 }

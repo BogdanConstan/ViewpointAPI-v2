@@ -4,27 +4,24 @@ using MongoDB.Driver;
 
 namespace ViewpointAPI.Services;
 
-public class BooksService
+public class SecuritiesService
 {
-    private readonly IMongoCollection<Data> _booksCollection;
+    private readonly IMongoCollection<Data> _securitiesCollection;
 
-    public BooksService(
-        IOptions<BookStoreDatabaseSettings> bookStoreDatabaseSettings)
+    public SecuritiesService(
+        IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
     {
         var mongoClient = new MongoClient(
-            bookStoreDatabaseSettings.Value.ConnectionString);
+            SecurityDatabaseSettings.Value.ConnectionString);
 
         var mongoDatabase = mongoClient.GetDatabase(
-            bookStoreDatabaseSettings.Value.DatabaseName);
+            SecurityDatabaseSettings.Value.DatabaseName);
 
-        _booksCollection = mongoDatabase.GetCollection<Data>(
-            bookStoreDatabaseSettings.Value.BooksCollectionName);
+        _securitiesCollection = mongoDatabase.GetCollection<Data>(
+            SecurityDatabaseSettings.Value.SecuritiesCollectionName);
     }
 
-    public async Task<List<Data>> GetAsync() =>
-        await _booksCollection.Find(_ => true).ToListAsync();
-
     public async Task<Data?> GetAsync(string id) =>
-        await _booksCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        await _securitiesCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
 }
