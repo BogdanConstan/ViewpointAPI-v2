@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<SecurityDatabaseSettings>(
     builder.Configuration.GetSection("SecurityDatabase"));
 
-builder.Services.AddSingleton<SecuritiesService>();
+builder.Services.AddSingleton<DataService>();
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

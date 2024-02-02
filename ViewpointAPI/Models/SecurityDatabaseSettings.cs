@@ -2,9 +2,14 @@
 
 public class SecurityDatabaseSettings
 {
-    public string ConnectionString { get; set; } = null!;
+    // Should reference to .env file go here?
+    //public string ConnectionString { get; set; } = null!;
 
     public string DatabaseName { get; set; } = null!;
 
-    public string SecuritiesCollectionName { get; set; } = null!;
+    public string DataCollectionName { get; set; } = null!;
+
+    public string ReferenceCollectionName { get; set; } = null!;
+
+    public string IdsCollectionName { get; set; } = null!;
 }

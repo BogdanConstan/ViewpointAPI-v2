@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace ViewpointAPI.Models;
 
 
-public class Data
+public class Data : SecurityData
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
