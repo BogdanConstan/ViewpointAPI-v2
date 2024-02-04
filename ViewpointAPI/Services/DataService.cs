@@ -23,7 +23,9 @@ public class DataService
             SecurityDatabaseSettings.Value.DataCollectionName);
     }
 
-    public async Task<Data?> Get(string identifier, string field, DateTime? startDate, DateTime? endDate)
+
+    // Firgure out how to use abstract class 'SecurityData'
+    public async Task<List<Data?>> Get(string identifier, string field, DateTime? startDate, DateTime? endDate)
     {
         if (startDate is null)
         {
@@ -34,7 +36,10 @@ public class DataService
         {
             endDate = defaultEndDate;
         }
-        // find a way to return only data that is needed
-        return await _dataCollection.Find(x => x.Id == identifier).FirstOrDefaultAsync();
+
+        var builder = Builders<Data>.Filter;
+        var filter = builder.Eq(x => x.Identifier, identifier) & builder.Eq(x => x.Field, field) & builder.Gte(x => x.Timestamp, startDate.Value) & builder.Lte(x => x.Timestamp, endDate.Value);
+        
+        return await _dataCollection.Find(filter).ToListAsync();
     }
 }

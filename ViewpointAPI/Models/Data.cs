@@ -2,30 +2,33 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
-namespace ViewpointAPI.Models;
-
-
-public class Data : SecurityData
+namespace ViewpointAPI.Models 
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public class Data : SecurityData
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
-    [BsonElement("identifier")]
-    [JsonPropertyName("Identifier")]
-    public string Identifier { get; set; }
+        [BsonElement("identifier")]
+        [JsonPropertyName("Identifier")]
+        public string Identifier { get; set; }
 
-    [BsonElement("field")]
-    public string Field { get; set; }
+        [BsonElement("field")]
+        public string Field { get; set; }
 
-    [BsonElement("timestamp")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-    public DateTime Timestamp { get; set; }
+        [BsonElement("timestamp")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime Timestamp { get; set; }
 
-    [BsonElement("value")]
-    public double Value { get; set; }
+        [BsonElement("value")]
+        public double Value { get; set; }
 
-    [BsonElement("modified")]
-    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-    public DateTime Modified { get; set; }
+        [BsonElement("modified")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime Modified { get; set; }
+    }
 }
+
+
+

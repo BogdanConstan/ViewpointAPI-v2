@@ -1,9 +1,13 @@
+using dotenv.net;
 using ViewpointAPI.Models;
 using ViewpointAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//DotEnv.Load();
+
 // Add services to the container.
+//string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
 builder.Services.Configure<SecurityDatabaseSettings>(
     builder.Configuration.GetSection("SecurityDatabase"));
 

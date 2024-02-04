@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using ViewpointAPI.Models;
+using dotenv.net;
+
 
 namespace ViewpointAPI.Services
 {

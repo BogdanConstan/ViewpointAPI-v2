@@ -14,11 +14,11 @@ public class SecuritiesController : ControllerBase
     // Sample code. 
     public SecuritiesController(DataService DataService) =>
         _dataService = DataService;
-
-    [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Data>> Get(string id)
+    // Figure out how to make this work
+    [HttpGet("{id}")]
+    public async Task<ActionResult<List<Data>>> GetData(string identifier, string field, DateTime? startDate, DateTime? endDate)
     {
-        var history = await _dataService.GetData(id);
+        var history = await _dataService.Get(identifier, field, startDate, endDate);
 
         if (history is null)
         {
