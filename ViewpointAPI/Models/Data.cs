@@ -6,6 +6,7 @@ namespace ViewpointAPI.Models
 {
     public class Data : SecurityData
     {
+        /** This class represents the 'data' collection in the MongoDB database */
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

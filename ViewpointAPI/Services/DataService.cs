@@ -27,6 +27,8 @@ public class DataService
     // Firgure out how to use abstract class 'SecurityData'
     public async Task<List<Data?>> Get(string identifier, string field, DateTime? startDate, DateTime? endDate)
     {
+        /** Queries from database given the identifier, field, startDate and endDate. If startDate or endDate are not provided,
+         * default values are used.**/
         if (startDate is null)
         {
             startDate = defaultStartDate;

@@ -12,9 +12,9 @@ public class SecuritiesController : ControllerBase
 
 
     // Sample code. 
+    // We would need two controller methods, one for history and one for reference
     public SecuritiesController(DataService DataService) =>
         _dataService = DataService;
-    // Figure out how to make this work
     [HttpGet("{id}")]
     public async Task<ActionResult<List<Data>>> GetData(string identifier, string field, DateTime? startDate, DateTime? endDate)
     {
