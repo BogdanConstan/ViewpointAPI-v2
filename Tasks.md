@@ -16,7 +16,7 @@
 - Determine and implement `IService.cs` interface
 
 ### Controller
-- Code implementation for `SecuritiesController.cs` controller
+- Code implementation for `SecuritiesController.cs` controller [Bogdan][In Progress]
 
 ### Cache
 - Research about cache implementations for C# (libraries, framewors, etc)
