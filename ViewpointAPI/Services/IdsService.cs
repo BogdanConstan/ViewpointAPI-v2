@@ -13,8 +13,9 @@ namespace ViewpointAPI.Services
         public IdsService(
             IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
         {
-            var mongoClient = new MongoClient(
-                Environment.GetEnvironmentVariable("CONNECTIONSTRING"));
+
+            var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
+            var mongoClient = new MongoClient(connectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(
                 SecurityDatabaseSettings.Value.DatabaseName);

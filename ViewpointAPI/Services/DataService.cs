@@ -13,8 +13,8 @@ public class DataService
     public DataService(
         IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
     {
-        var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
 
+        var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
         var mongoClient = new MongoClient(connectionString);
 
         var mongoDatabase = mongoClient.GetDatabase(
