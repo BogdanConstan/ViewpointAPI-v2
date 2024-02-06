@@ -4,12 +4,13 @@ using ViewpointAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//DotEnv.Load();
+DotEnv.Load();
 
 // Add services to the container.
-//string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
-builder.Services.Configure<SecurityDatabaseSettings>(
-    builder.Configuration.GetSection("SecurityDatabase"));
+string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
+builder.Configuration["SecurityDatabase:ConnectionString"] = connectionString;
+
+builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSection("SecurityDatabase"));
 
 builder.Services.AddSingleton<DataService>();
 
