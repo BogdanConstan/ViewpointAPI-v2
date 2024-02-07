@@ -10,8 +10,7 @@ namespace ViewpointAPI.Services
     {
         private readonly IMongoCollection<Data> _idsCollection;
 
-        public IdsService(
-            IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
+        public IdsService(IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
         {
 
             var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
@@ -26,8 +25,7 @@ namespace ViewpointAPI.Services
 
         public async Task<SecurityData?> Get(string identifier) 
         {
-            throw new NotImplementedException();
-            //Figure out what is needed from this query
+            return _idsCollection.Find(securityId => securityId.Identifier == identifier).FirstOrDefault();
         }
 
     }
