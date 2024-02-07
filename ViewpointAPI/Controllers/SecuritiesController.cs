@@ -13,14 +13,14 @@ namespace ViewpointAPI.Controllers
     public class SecuritiesController : ControllerBase
     {
         private readonly DataService _dataService;
-        //private readonly ReferenceService _referenceService;
+        private readonly ReferenceService _referenceService;
 
         private readonly IMemoryCache _memoryCache;
 
-        public SecuritiesController(DataService dataService, /*ReferenceService referenceService,*/ IMemoryCache memoryCache)
+        public SecuritiesController(DataService dataService, ReferenceService referenceService, IMemoryCache memoryCache)
         {
             _dataService = dataService;
-            //_referenceService = referenceService;
+            _referenceService = referenceService;
             _memoryCache = memoryCache;
             _memoryCache.Set("GCAN30YR INDEX", "BBG002SBNXC9");
         }
@@ -52,7 +52,7 @@ namespace ViewpointAPI.Controllers
             return history;
         }
 
-        /*[HttpGet("reference")]
+        [HttpGet("reference")]
         public async Task<ActionResult<List<Reference>>> GetReference(string identifier, string field)
         {
             var reference = await _referenceService.Get(identifier, field);
@@ -63,6 +63,6 @@ namespace ViewpointAPI.Controllers
             }
 
             return reference;
-        }*/
+        }
     }
 }
