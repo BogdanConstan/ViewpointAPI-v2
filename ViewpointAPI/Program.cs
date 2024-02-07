@@ -14,6 +14,8 @@ builder.Configuration["SecurityDatabase:ConnectionString"] = connectionString;
 builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSection("SecurityDatabase"));
 
 builder.Services.AddSingleton<DataService>();
+builder.Services.AddSingleton<ReferenceService>();
+builder.Services.AddSingleton<IdsService>();
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

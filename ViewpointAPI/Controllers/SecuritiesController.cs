@@ -23,12 +23,13 @@ namespace ViewpointAPI.Controllers
             _referenceService = referenceService;
             _memoryCache = memoryCache;
             _memoryCache.Set("GCAN30YR INDEX", "BBG002SBNXC9");
+            _memoryCache.Set("BAY7TRAU INDEX", "BBG00801VTR2");
         }
 
         [HttpGet("history")]
         public async Task<ActionResult<List<Data>>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
-             if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
+            if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
             {
                 // Retrieve the global identifier based on the identifier from IDS
                 //globalIdentifier = await SomeMethodToRetrieveGlobalIdentifier(identifier);
@@ -55,7 +56,21 @@ namespace ViewpointAPI.Controllers
         [HttpGet("reference")]
         public async Task<ActionResult<List<Reference>>> GetReference(string identifier, string field)
         {
-            var reference = await _referenceService.Get(identifier, field);
+            if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
+            {
+                // Retrieve the global identifier based on the identifier from IDS
+                //globalIdentifier = await SomeMethodToRetrieveGlobalIdentifier(identifier);
+
+                if (globalIdentifier == null)
+                {
+                    return NotFound($"Global identifier not found for identifier: {identifier}");
+                }
+
+                // Cache the global identifier with the identifier as the cache key
+                _memoryCache.Set(identifier, globalIdentifier);
+            }
+
+            var reference = await _referenceService.Get(globalIdentifier, field);
 
             if (reference == null)
             {
