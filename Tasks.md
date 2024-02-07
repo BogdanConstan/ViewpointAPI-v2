@@ -5,14 +5,14 @@
 
 ### Models
 - Code implementation for `Data.cs` model [Andy][In progress]
-- Code implementation for `Id.cs` model
-- Code implementation for `Reference.cs` model
+- Code implementation for `Id.cs` model 
+- Code implementation for `Reference.cs` model [Andy][In progress]
 - Determine and implement abstract class for models
 
 ### Services
 - Code implmentation for `DataService.cs` service [Andy][In progress]
-- Code implementation for `IdsService.cs` service
-- Code implentation for `ReferenceService.cs` service
+- Code implementation for `IdsService.cs` service 
+- Code implentation for `ReferenceService.cs` service [Andy][In progress]
 - Determine and implement `IService.cs` interface
 
 ### Controller
