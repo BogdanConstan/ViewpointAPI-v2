@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using ViewpointAPI.Models;
-using dotenv.net;
+//using dotenv.net;
 
 
 namespace ViewpointAPI.Services
 {
     public class IdsService
     {
-        private readonly IMongoCollection<Data> _idsCollection;
+        private readonly IMongoCollection<Ids> _idsCollection;
 
         public IdsService(IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
         {
@@ -19,13 +19,14 @@ namespace ViewpointAPI.Services
             var mongoDatabase = mongoClient.GetDatabase(
                 SecurityDatabaseSettings.Value.DatabaseName);
 
-            _idsCollection = mongoDatabase.GetCollection<Data>(
+            _idsCollection = mongoDatabase.GetCollection<Ids>(
                 SecurityDatabaseSettings.Value.IdsCollectionName);
         }
 
-        public async Task<SecurityData?> Get(string identifier) 
+        public async Task<string?> GetGlobalIdentifier(string identifier)
         {
-            return _idsCollection.Find(securityId => securityId.Identifier == identifier).FirstOrDefault();
+            var id = await _idsCollection.Find(x => x.Identifier == identifier).FirstOrDefaultAsync();
+            return id?.Id_bb_global;
         }
 
     }

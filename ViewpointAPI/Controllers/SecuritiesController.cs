@@ -14,16 +14,15 @@ namespace ViewpointAPI.Controllers
     {
         private readonly DataService _dataService;
         private readonly ReferenceService _referenceService;
-
+        private readonly IdsService _idsService;
         private readonly IMemoryCache _memoryCache;
 
-        public SecuritiesController(DataService dataService, ReferenceService referenceService, IMemoryCache memoryCache)
+        public SecuritiesController(DataService dataService, ReferenceService referenceService, IdsService idsService, IMemoryCache memoryCache)
         {
             _dataService = dataService;
             _referenceService = referenceService;
+            _idsService = idsService;
             _memoryCache = memoryCache;
-            _memoryCache.Set("GCAN30YR INDEX", "BBG002SBNXC9");
-            _memoryCache.Set("BAY7TRAU INDEX", "BBG00801VTR2");
         }
 
         [HttpGet("history")]
@@ -32,7 +31,7 @@ namespace ViewpointAPI.Controllers
             if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
             {
                 // Retrieve the global identifier based on the identifier from IDS
-                //globalIdentifier = await SomeMethodToRetrieveGlobalIdentifier(identifier);
+                globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
 
                 if (globalIdentifier == null)
                 {
@@ -59,7 +58,7 @@ namespace ViewpointAPI.Controllers
             if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
             {
                 // Retrieve the global identifier based on the identifier from IDS
-                //globalIdentifier = await SomeMethodToRetrieveGlobalIdentifier(identifier);
+                globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
 
                 if (globalIdentifier == null)
                 {
@@ -78,6 +77,7 @@ namespace ViewpointAPI.Controllers
             }
 
             return reference;
+
         }
     }
 }
