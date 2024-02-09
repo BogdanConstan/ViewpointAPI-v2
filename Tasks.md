@@ -18,6 +18,7 @@
 - Code implementation for `IdsService.cs` service [Billy][In progress]
 - Code implentation for `ReferenceService.cs` service [Andy][In progress]
 - Implement an interface for each service [Billy][In progress]
+- Implement tests for one function [BOGDAN CONSTANTINESCU]
 
 ### Controller
 - Code implementation for `SecuritiesController.cs` controller [Bogdan][In Progress]
