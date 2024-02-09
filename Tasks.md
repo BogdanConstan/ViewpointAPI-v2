@@ -8,12 +8,16 @@
 - Code implementation for `Id.cs` model 
 - Code implementation for `Reference.cs` model [Andy][In progress]
 - Determine and implement abstract class for models
+- Split models into two [?]
+
+### Repositories
+- Code implementation for repositories 3x [Andy][In progress]
 
 ### Services
 - Code implmentation for `DataService.cs` service [Andy][In progress]
-- Code implementation for `IdsService.cs` service 
+- Code implementation for `IdsService.cs` service [Billy][In progress]
 - Code implentation for `ReferenceService.cs` service [Andy][In progress]
-- Determine and implement `IService.cs` interface
+- Implement an interface for each service [Billy][In progress]
 
 ### Controller
 - Code implementation for `SecuritiesController.cs` controller [Bogdan][In Progress]
@@ -21,5 +25,9 @@
 ### Cache
 - Research about cache implementations for C# (libraries, framewors, etc)
 
-### Authenticaltion
-- Reasearch about authentication methods for C#
+### Authentication
+- Research about authentication methods for C#
+
+### Cloud Deployment
+- Research how to deploy on Azure
+
