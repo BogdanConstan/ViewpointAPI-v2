@@ -12,26 +12,26 @@ namespace ViewpointAPI.Controllers
     [Route("api/[controller]")]
     public class SecuritiesController : ControllerBase
     {
-        private readonly DataService _dataService;
+        private readonly HistoryService _dataService;
         private readonly ReferenceService _referenceService;
-        private readonly IdsService _idsService;
+
         private readonly IMemoryCache _memoryCache;
 
-        public SecuritiesController(DataService dataService, ReferenceService referenceService, IdsService idsService, IMemoryCache memoryCache)
+        public SecuritiesController(HistoryService dataService, ReferenceService referenceService, IMemoryCache memoryCache)
         {
             _dataService = dataService;
             _referenceService = referenceService;
-            _idsService = idsService;
             _memoryCache = memoryCache;
+            _memoryCache.Set("GCAN30YR INDEX", "BBG002SBNXC9");
         }
 
         [HttpGet("history")]
-        public async Task<ActionResult<List<Data>>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
+        public async Task<ActionResult<List<History>>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
-            if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
+             if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
             {
                 // Retrieve the global identifier based on the identifier from IDS
-                globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
+                //globalIdentifier = await SomeMethodToRetrieveGlobalIdentifier(identifier);
 
                 if (globalIdentifier == null)
                 {
@@ -55,21 +55,7 @@ namespace ViewpointAPI.Controllers
         [HttpGet("reference")]
         public async Task<ActionResult<List<Reference>>> GetReference(string identifier, string field)
         {
-            if (!_memoryCache.TryGetValue(identifier, out string globalIdentifier))
-            {
-                // Retrieve the global identifier based on the identifier from IDS
-                globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
-
-                if (globalIdentifier == null)
-                {
-                    return NotFound($"Global identifier not found for identifier: {identifier}");
-                }
-
-                // Cache the global identifier with the identifier as the cache key
-                _memoryCache.Set(identifier, globalIdentifier);
-            }
-
-            var reference = await _referenceService.Get(globalIdentifier, field);
+            var reference = await _referenceService.Get(identifier, field);
 
             if (reference == null)
             {
@@ -77,7 +63,6 @@ namespace ViewpointAPI.Controllers
             }
 
             return reference;
-
         }
     }
 }

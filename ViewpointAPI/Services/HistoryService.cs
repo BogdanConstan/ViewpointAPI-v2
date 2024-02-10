@@ -4,13 +4,13 @@ using MongoDB.Driver;
 
 namespace ViewpointAPI.Services;
 
-public class DataService
+public class HistoryService
 {
-    private readonly IMongoCollection<Data> _dataCollection;
+    private readonly IMongoCollection<History> _dataCollection;
     private  DateTime defaultStartDate = DateTime.Today.AddYears(-1);
     private DateTime defaultEndDate = DateTime.Today;
 
-    public DataService(
+    public HistoryService(
         IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
     {
 
@@ -20,13 +20,13 @@ public class DataService
         var mongoDatabase = mongoClient.GetDatabase(
             SecurityDatabaseSettings.Value.DatabaseName);
 
-        _dataCollection = mongoDatabase.GetCollection<Data>(
+        _dataCollection = mongoDatabase.GetCollection<History>(
             SecurityDatabaseSettings.Value.DataCollectionName);
     }
 
 
     // Firgure out how to use abstract class 'SecurityData'
-    public async Task<List<Data?>> Get(string identifier, string field, DateTime? startDate, DateTime? endDate)
+    public async Task<List<History?>> Get(string identifier, string field, DateTime? startDate, DateTime? endDate)
     {
         /** Queries from database given the identifier, field, startDate and endDate. If startDate or endDate are not provided,
          * default values are used.**/
@@ -40,7 +40,7 @@ public class DataService
             endDate = defaultEndDate;
         }
 
-        var builder = Builders<Data>.Filter;
+        var builder = Builders<History>.Filter;
         var filter = builder.Eq(x => x.Identifier, identifier) & builder.Eq(x => x.Field, field) & builder.Gte(x => x.Timestamp, startDate.Value) & builder.Lte(x => x.Timestamp, endDate.Value);
         
         return await _dataCollection.Find(filter).ToListAsync();
