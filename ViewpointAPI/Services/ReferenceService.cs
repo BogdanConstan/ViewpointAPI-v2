@@ -1,37 +1,24 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using System;
+using System.Threading.Tasks;
 using ViewpointAPI.Models;
+using ViewpointAPI.Repositories;
 
 namespace ViewpointAPI.Services
 {
-    public class ReferenceService
+    public class ReferenceService : IReferenceService
     {
-        private readonly IMongoCollection<Reference> _referenceCollection;
+        private readonly IReferenceRepository _referenceRepository;
 
-        public ReferenceService(
-            IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
+
+        public ReferenceService(IReferenceRepository referenceRepository)
         {
-            
-            var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
-            var mongoClient = new MongoClient(connectionString);
-
-            var mongoDatabase = mongoClient.GetDatabase(
-                SecurityDatabaseSettings.Value.DatabaseName);
-
-            _referenceCollection = mongoDatabase.GetCollection<Reference>(
-                SecurityDatabaseSettings.Value.ReferenceCollectionName);
+            _referenceRepository = referenceRepository ?? throw new ArgumentNullException(nameof(referenceRepository));
         }
 
-        public IMongoCollection<Reference> Get_referenceCollection()
+        public async Task<ReferenceResponse> GetReference(string identifier, string field)
         {
-            return _referenceCollection;
-        }
-
-        public async Task<List<Reference?>> Get(string identifier, string field)
-        {
-            var builder = Builders<Reference>.Filter;
-            var filter = builder.Eq(x => x.Identifier, identifier) & builder.Eq(x => x.Field, field);
-            return await _referenceCollection.Find(filter).ToListAsync();
+            // Add any additional business logic here if needed
+            return await _referenceRepository.GetReference(identifier, field);
         }
     }
 }

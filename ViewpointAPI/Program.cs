@@ -1,26 +1,38 @@
 using dotenv.net;
 using ViewpointAPI.Models;
 using ViewpointAPI.Services;
+using ViewpointAPI.Repositories;
+using ViewpointAPI.Cache;
 using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 
-// Add services to the container.
 string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
 builder.Configuration["SecurityDatabase:ConnectionString"] = connectionString;
 
 builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSection("SecurityDatabase"));
 
-builder.Services.AddSingleton<HistoryService>();
+builder.Services.AddSingleton<IHistoryService, HistoryService>();
+builder.Services.AddSingleton<IReferenceService, ReferenceService>();
+
+builder.Services.AddSingleton<IHistoryRepository, HistoryRepository>();
+builder.Services.AddSingleton<IReferenceRepository, ReferenceRepository>();
+builder.Services.AddSingleton<IIdsRepository, IdsRepository>();
+
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICache, Cache>();
+
+
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
