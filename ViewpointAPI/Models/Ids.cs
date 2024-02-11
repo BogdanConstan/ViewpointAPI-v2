@@ -3,10 +3,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ViewpointAPI.Models
 {
-    [BsonIgnoreExtraElements]
-    public class Ids : SecurityData
-    {
-        //define variables for this collection here
+    public class Ids
+    {        
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

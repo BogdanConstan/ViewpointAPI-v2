@@ -4,13 +4,12 @@ using System.Text.Json.Serialization;
 
 namespace ViewpointAPI.Models 
 {
-    public class Data : SecurityData
+    public class History
     {
-        /** This class represents the 'data' collection in the MongoDB database */
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-
+        
         [BsonElement("identifier")]
         [JsonPropertyName("Identifier")]
         public string Identifier { get; set; }

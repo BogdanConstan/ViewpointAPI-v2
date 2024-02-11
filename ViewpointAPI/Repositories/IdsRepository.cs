@@ -1,16 +1,14 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using ViewpointAPI.Models;
-//using dotenv.net;
 
-
-namespace ViewpointAPI.Services
+namespace ViewpointAPI.Repositories
 {
-    public class IdsService
+    public class IdsRepository : IIdsRepository
     {
         private readonly IMongoCollection<Ids> _idsCollection;
 
-        public IdsService(IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
+        public IdsRepository(IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
         {
 
             var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
@@ -27,6 +25,13 @@ namespace ViewpointAPI.Services
         {
             var id = await _idsCollection.Find(x => x.Identifier == identifier).FirstOrDefaultAsync();
             return id?.Id_bb_global;
+        }
+        public async Task<List<KeyValuePair<string, string>>> GetCacheInfo()
+        {
+            var cacheInfo = await _idsCollection.Find(_ => true)
+                                                    .Project(x => new KeyValuePair<string, string>(x.Identifier, x.Id_bb_global))
+                                                    .ToListAsync();
+            return cacheInfo;
         }
 
     }
