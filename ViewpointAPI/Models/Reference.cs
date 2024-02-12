@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace ViewpointAPI.Models
 {
-    public class Reference : SecurityData
+    public class Reference
     {
         [BsonId]
         public ObjectId Id { get; set; }
