@@ -14,25 +14,33 @@ namespace ViewpointAPITests
         [TestMethod]
         public async Task GetHistory_ReturnsExpectedHistory()
         {
-            // Arrange
             var mockHistoryRepository = new Mock<IHistoryRepository>();
             var expectedHistoryResponse = new HistoryResponse
             {
-                // Populate with expected data
+                Identifier = "BBG000HBHK85",
+                Field = "DAY_TO_DAY_TOT_RETURN_GROSS_DVDS",
+                Count = 4,
+                Data = new List<HistoryDataItem>
+                {
+                    new HistoryDataItem { Timestamp = DateTime.Parse("2020-02-18T00:00:00Z"), Value = 0.0559 },
+                    new HistoryDataItem { Timestamp = DateTime.Parse("2020-02-19T00:00:00Z"), Value = 0.3753 },
+                    new HistoryDataItem { Timestamp = DateTime.Parse("2020-02-20T00:00:00Z"), Value = 0.1049 },
+                    new HistoryDataItem { Timestamp = DateTime.Parse("2020-02-21T00:00:00Z"), Value = -0.5579 }
+                }
             };
-            mockHistoryRepository.Setup(repo => repo.GetHistory(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
-                                 .ReturnsAsync(expectedHistoryResponse);
+            mockHistoryRepository.Setup(repo => repo.GetHistory("BBG000HBHK85", "DAY_TO_DAY_TOT_RETURN_GROSS_DVDS", It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
+                     .ReturnsAsync(expectedHistoryResponse);
 
             var service = new HistoryService(mockHistoryRepository.Object);
-
-            // Act
-            var result = await service.GetHistory("identifier", "field", DateTime.Now.AddDays(-10), DateTime.Now);
+            var result = await service.GetHistory("BBG000HBHK85", "DAY_TO_DAY_TOT_RETURN_GROSS_DVDS", DateTime.Parse("2021-02-18T00:00:00Z"), DateTime.Parse("2021-02-21T00:00:00Z"));
 
             // Assert
+            // Since querying happens in the repository, and the only function of this method is to call the repository's GetHistory() method, this is the only relevant assertion 
+            // for now. 
             Assert.IsNotNull(result);
-            // Add more detailed assertions based on the properties of HistoryResponse
-            // For example, if HistoryResponse contains a property named Data, you might assert that it's not null or empty
-            // Assert.AreEqual(expectedHistoryResponse.Data, result.Data);
+            }
+
+
         }
     }
 }
