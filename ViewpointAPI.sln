@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewpointAPI", "ViewpointAPI\ViewpointAPI.csproj", "{DFBD4719-BE6C-4E50-9D1D-FFDCD4C4AAAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestViewpoitAPI", "TestViewpoitAPI\TestViewpoitAPI.csproj", "{FA84CC2C-1718-4550-91F1-7E3E9A78ED0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DFBD4719-BE6C-4E50-9D1D-FFDCD4C4AAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFBD4719-BE6C-4E50-9D1D-FFDCD4C4AAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFBD4719-BE6C-4E50-9D1D-FFDCD4C4AAAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA84CC2C-1718-4550-91F1-7E3E9A78ED0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA84CC2C-1718-4550-91F1-7E3E9A78ED0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA84CC2C-1718-4550-91F1-7E3E9A78ED0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA84CC2C-1718-4550-91F1-7E3E9A78ED0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
