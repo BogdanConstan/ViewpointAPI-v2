@@ -28,7 +28,8 @@ namespace ViewpointAPITests
                     new HistoryDataItem { Timestamp = DateTime.Parse("2020-02-21T00:00:00Z"), Value = -0.5579 }
                 }
             };
-            mockHistoryRepository.Setup(repo => repo.GetHistory("BBG000HBHK85", "DAY_TO_DAY_TOT_RETURN_GROSS_DVDS", It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
+            // Set up mock repository that will return the expected output that the HistoryService class can use
+            mockHistoryRepository.Setup(repo => repo.GetHistory("BBG000HBHK85", "DAY_TO_DAY_TOT_RETURN_GROSS_DVDS", DateTime.Parse("2021-02-18T00:00:00Z"), DateTime.Parse("2021-02-21T00:00:00Z")))
                      .ReturnsAsync(expectedHistoryResponse);
 
             var service = new HistoryService(mockHistoryRepository.Object);
