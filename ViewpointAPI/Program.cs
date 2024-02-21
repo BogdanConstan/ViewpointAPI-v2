@@ -2,7 +2,6 @@ using dotenv.net;
 using ViewpointAPI.Models;
 using ViewpointAPI.Services;
 using ViewpointAPI.Repositories;
-using ViewpointAPI.Cache;
 using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,16 +15,14 @@ builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSe
 
 builder.Services.AddSingleton<IHistoryService, HistoryService>();
 builder.Services.AddSingleton<IReferenceService, ReferenceService>();
+builder.Services.AddSingleton<IIdsService, IdsService>();
 
 builder.Services.AddSingleton<IHistoryRepository, HistoryRepository>();
 builder.Services.AddSingleton<IReferenceRepository, ReferenceRepository>();
 builder.Services.AddSingleton<IIdsRepository, IdsRepository>();
 
-
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<ICache, Cache>();
-
-
+builder.Services.AddHostedService<CacheHydrationService>();
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

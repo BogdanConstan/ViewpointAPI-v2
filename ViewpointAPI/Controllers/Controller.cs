@@ -22,14 +22,52 @@ namespace ViewpointAPI.Controllers
         [HttpGet("history")]
         public async Task<ActionResult<HistoryResponse>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
+            // Parameter validation
+            if (string.IsNullOrEmpty(identifier))
+            {
+                return BadRequest("Identifier cannot be empty.");
+            }
+
+            if (string.IsNullOrEmpty(field))
+            {
+                return BadRequest("Field cannot be empty.");
+            }
+
+            if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+            {
+                return BadRequest("Start date cannot be after end date.");
+            }
+
             var historyResponse = await _historyService.GetHistory(identifier, field, startDate, endDate);
+
+            if (historyResponse.Identifier == null)
+            {
+                return NotFound("History not found for the specified identifier.");
+            }
             return Ok(historyResponse);
         }
 
         [HttpGet("reference")]
         public async Task<ActionResult<ReferenceResponse>> GetReference(string identifier, string field)
         {
+            // Parameter validation
+            if (string.IsNullOrEmpty(identifier))
+            {
+                return BadRequest("Identifier cannot be empty.");
+            }
+
+            if (string.IsNullOrEmpty(field))
+            {
+                return BadRequest("Field cannot be empty.");
+            }
+
             var referenceResponse = await _referenceService.GetReference(identifier, field);
+
+            if (referenceResponse.Identifier == null)
+            {
+                return NotFound("Reference not found for the specified identifier.");
+            }
+
             return Ok(referenceResponse);
         }
     }
