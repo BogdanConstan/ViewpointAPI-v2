@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using ViewpointAPI.Models;
 using ViewpointAPI.Repositories;
+using ViewpointAPI.Exceptions;
 
 namespace ViewpointAPI.Services
 {
@@ -20,7 +23,33 @@ namespace ViewpointAPI.Services
         {
             // Add any additional business logic here if needed
             var globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
-            return await _historyRepository.GetHistory(globalIdentifier, field, startDate, endDate);
+            
+            if (globalIdentifier == null) 
+            {
+                throw new CustomException("Local Identifier not found in database");
+            }
+
+            else if (globalIdentifier == "null")
+            {
+                throw new CustomException("This local identifier was already queried in the last 24 hours and is not present in the database");
+            }
+
+            var historyData =  await _historyRepository.GetHistory(globalIdentifier, field, startDate, endDate);
+
+            var historyDataItems = historyData.Select(x => new HistoryDataItem
+            {
+                Timestamp = x.Timestamp,
+                Value = x.Value
+            }).ToList();
+
+            var response = new HistoryResponse
+            {
+                Identifier = identifier,
+                Field = field,
+                Data = historyDataItems
+            };
+
+            return response;
         }
     }
 }

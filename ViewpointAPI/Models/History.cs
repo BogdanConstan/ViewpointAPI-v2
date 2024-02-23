@@ -22,7 +22,7 @@ namespace ViewpointAPI.Models
         public DateTime Timestamp { get; set; }
 
         [BsonElement("value")]
-        public float Value { get; set; }
+        public double Value { get; set; }
 
         [BsonElement("modified")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

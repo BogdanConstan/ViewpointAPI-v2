@@ -7,8 +7,6 @@ namespace ViewpointAPI.Repositories
     public interface IIdsRepository 
     {
         Task<string?> GetGlobalIdentifier(string identifier);
-        Task<List<KeyValuePair<string, string>>> GetCacheInfo();
-
-
+        Task<Dictionary<string, string>> GetAllIDs();
     }
 }

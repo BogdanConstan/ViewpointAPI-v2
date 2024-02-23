@@ -10,7 +10,7 @@ namespace ViewpointAPI.Models
 
         public string Field { get; set; }
 
-        public int Count { get; set; }
+        public int Count => Data?.Count ?? 0;
        
         public List<HistoryDataItem> Data { get; set; }
     }

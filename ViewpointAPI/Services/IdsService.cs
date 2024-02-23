@@ -15,14 +15,13 @@ namespace ViewpointAPI.Services
         {
             _idsRepository = idsRepository ?? throw new ArgumentNullException(nameof(idsRepository));
             _cache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-            PreloadCache();
         }
 
         public async Task<string?> GetGlobalIdentifier(string identifier)
         {
             // Add any additional business logic here if needed
             
-            if (!_cache.TryGetValue(identifier, out string globalIdentifier))
+            if (!_cache.TryGetValue(identifier, out string? globalIdentifier))
             {
                 globalIdentifier = await _idsRepository.GetGlobalIdentifier(identifier);
                 SetNewCacheEntry(identifier, globalIdentifier);
@@ -34,11 +33,11 @@ namespace ViewpointAPI.Services
 
         private async Task SetNewCacheEntry(string identifier, string globalIdentifier) 
         {
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(24));
-
             if (globalIdentifier == null)
             {
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromHours(24));
+                
                 _cache.Set(identifier, "null", cacheEntryOptions);
             }
             else {
@@ -48,7 +47,7 @@ namespace ViewpointAPI.Services
 
         public async Task PreloadCache()
         {
-            var cacheInfo = await _idsRepository.GetCacheInfo();
+            var cacheInfo = await _idsRepository.GetAllIDs();
 
             foreach (var pair in cacheInfo)
             {

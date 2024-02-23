@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks; 
+using ViewpointAPI.Exceptions;
 
 namespace ViewpointAPI.Repositories
 {
@@ -24,7 +25,7 @@ namespace ViewpointAPI.Repositories
                 SecurityDatabaseSettings.Value.ReferenceCollectionName);
         }
 
-        public async Task<ReferenceResponse> GetReference(string identifier, string field)
+        public async Task<Reference> GetReference(string identifier, string field)
         {
             var filterBuilder = Builders<Reference>.Filter;
             var filter = filterBuilder.Eq(x => x.Identifier, identifier) &
@@ -32,14 +33,12 @@ namespace ViewpointAPI.Repositories
 
             var referenceData = await _referenceCollection.Find(filter).FirstOrDefaultAsync();
 
-            var response = new ReferenceResponse
+            if(referenceData == null) 
             {
-                Identifier = identifier,
-                Field = field,
-                Value = referenceData?.Value
-            };
+                throw new CustomException("Reference data not found for specified criteria");
+            }
 
-            return response;
+            return referenceData;
         }
     }
 }

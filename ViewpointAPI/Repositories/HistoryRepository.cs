@@ -4,7 +4,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using ViewpointAPI.Exceptions; 
 
 namespace ViewpointAPI.Repositories
 {
@@ -13,9 +14,10 @@ namespace ViewpointAPI.Repositories
         private readonly IMongoCollection<History> _historyCollection;
         private DateTime defaultStartDate = DateTime.Today.AddYears(-1);
         private DateTime defaultEndDate = DateTime.Today;
+        private readonly CustomException _customException;
 
         public HistoryRepository(
-            IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings)
+            IOptions<SecurityDatabaseSettings> SecurityDatabaseSettings, CustomException customException)
         {
             var connectionString = SecurityDatabaseSettings.Value.ConnectionString;
             var mongoClient = new MongoClient(connectionString);
@@ -25,9 +27,12 @@ namespace ViewpointAPI.Repositories
 
             _historyCollection = mongoDatabase.GetCollection<History>(
                 SecurityDatabaseSettings.Value.HistoryCollectionName);
+
+            _customException = customException ?? throw new ArgumentNullException(nameof(customException));
+
         }
 
-        public async Task<HistoryResponse> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate) 
+        public async Task<List<History>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate) 
         {
             startDate ??= defaultStartDate;
             endDate ??= defaultEndDate;
@@ -37,22 +42,16 @@ namespace ViewpointAPI.Repositories
                         filterBuilder.Eq(x => x.Field, field) &
                         filterBuilder.Gte(x => x.Timestamp, startDate.Value) &
                         filterBuilder.Lte(x => x.Timestamp, endDate.Value);
-
+                        
             var historyData = await _historyCollection.Find(filter).ToListAsync();
 
-            var response = new HistoryResponse
+            if(historyData == null || historyData.Count == 0) 
             {
-                Identifier = identifier,
-                Field = field,
-                Count = historyData.Count,
-                Data = historyData.Select(x => new HistoryDataItem
-                {
-                    Timestamp = x.Timestamp,
-                    Value = x.Value
-                }).ToList()
-            };
+                throw new CustomException("History data not found for specified criteria");
+            }
 
-            return response;
+            return historyData;
+
         }
     }
 }

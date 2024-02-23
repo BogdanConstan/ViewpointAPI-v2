@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using ViewpointAPI.Models;
 using ViewpointAPI.Services;
+using ViewpointAPI.Exceptions;
 
 namespace ViewpointAPI.Controllers
 {
@@ -23,52 +24,65 @@ namespace ViewpointAPI.Controllers
         public async Task<ActionResult<HistoryResponse>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
             // Parameter validation
-            if (string.IsNullOrEmpty(identifier))
+            if (string.IsNullOrWhiteSpace(identifier))
             {
                 return BadRequest("Identifier cannot be empty.");
             }
 
-            if (string.IsNullOrEmpty(field))
+            if (string.IsNullOrWhiteSpace(field))
             {
                 return BadRequest("Field cannot be empty.");
             }
+
+            identifier = identifier.Trim().ToUpper();
+            field = field.Trim().ToUpper();
 
             if (startDate.HasValue && endDate.HasValue && startDate > endDate)
             {
                 return BadRequest("Start date cannot be after end date.");
             }
 
-            var historyResponse = await _historyService.GetHistory(identifier, field, startDate, endDate);
-
-            if (historyResponse.Identifier == null)
+            try
             {
-                return NotFound("History not found for the specified identifier.");
+                var historyResponse = await _historyService.GetHistory(identifier, field, startDate, endDate);
+
+                return Ok(historyResponse);
             }
-            return Ok(historyResponse);
+            catch (CustomException ex)
+            {
+                // Log the exception if needed
+                return StatusCode(500, "An error occurred while processing the request: " + ex.Message);
+            }
         }
 
         [HttpGet("reference")]
         public async Task<ActionResult<ReferenceResponse>> GetReference(string identifier, string field)
         {
             // Parameter validation
-            if (string.IsNullOrEmpty(identifier))
+            if (string.IsNullOrWhiteSpace(identifier))
             {
                 return BadRequest("Identifier cannot be empty.");
             }
 
-            if (string.IsNullOrEmpty(field))
+            if (string.IsNullOrWhiteSpace(field))
             {
                 return BadRequest("Field cannot be empty.");
             }
 
-            var referenceResponse = await _referenceService.GetReference(identifier, field);
+            identifier = identifier.Trim().ToUpper();
+            field = field.Trim().ToUpper();            
 
-            if (referenceResponse.Identifier == null)
+            try
             {
-                return NotFound("Reference not found for the specified identifier.");
-            }
+                var referenceResponse = await _referenceService.GetReference(identifier, field);
 
-            return Ok(referenceResponse);
+                return Ok(referenceResponse);
+            }
+            catch (CustomException ex)
+            {
+                // Log the exception if needed
+                return StatusCode(500, "An error occurred while processing the request: " + ex.Message);
+            }
         }
     }
 }
