@@ -19,8 +19,8 @@ namespace ViewpointAPI.Services
 
         public async Task<string?> GetGlobalIdentifier(string identifier)
         {
-            // Add any additional business logic here if needed
-            
+            identifier = identifier.Trim().ToUpper();
+
             if (!_cache.TryGetValue(identifier, out string? globalIdentifier))
             {
                 globalIdentifier = await _idsRepository.GetGlobalIdentifier(identifier);
@@ -36,9 +36,9 @@ namespace ViewpointAPI.Services
             if (globalIdentifier == null)
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromHours(24));
-                
-                _cache.Set(identifier, "null", cacheEntryOptions);
+                .SetSlidingExpiration(TimeSpan.FromHours(1));
+
+                _cache.Set(identifier, globalIdentifier, cacheEntryOptions);
             }
             else {
                 _cache.Set(identifier, globalIdentifier);

@@ -44,14 +44,21 @@ namespace ViewpointAPI.Controllers
 
             try
             {
-                var historyResponse = await _historyService.GetHistory(identifier, field, startDate, endDate);
+                var historyDataItems = await _historyService.GetHistory(identifier, field, startDate, endDate);
+
+                var historyResponse = new HistoryResponse
+                {
+                    Identifier = identifier,
+                    Field = field,
+                    Data = historyDataItems
+                };
 
                 return Ok(historyResponse);
             }
-            catch (CustomException ex)
+            catch (IdNotFoundException ex)
             {
                 // Log the exception if needed
-                return StatusCode(500, "An error occurred while processing the request: " + ex.Message);
+                return StatusCode(400, ex.Message);
             }
         }
 
@@ -74,14 +81,21 @@ namespace ViewpointAPI.Controllers
 
             try
             {
-                var referenceResponse = await _referenceService.GetReference(identifier, field);
+                var referenceData = await _referenceService.GetReference(identifier, field);
+
+                var referenceResponse = new ReferenceResponse
+                {
+                    Identifier = identifier,
+                    Field = field,
+                    Value = referenceData
+                };
 
                 return Ok(referenceResponse);
             }
-            catch (CustomException ex)
+            catch (IdNotFoundException ex)
             {
                 // Log the exception if needed
-                return StatusCode(500, "An error occurred while processing the request: " + ex.Message);
+                return StatusCode(400, ex.Message);
             }
         }
     }

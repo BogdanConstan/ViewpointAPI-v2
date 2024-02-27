@@ -25,7 +25,7 @@ namespace ViewpointAPI.Repositories
                 SecurityDatabaseSettings.Value.ReferenceCollectionName);
         }
 
-        public async Task<Reference> GetReference(string identifier, string field)
+        public async Task<string?> GetReference(string identifier, string field)
         {
             var filterBuilder = Builders<Reference>.Filter;
             var filter = filterBuilder.Eq(x => x.Identifier, identifier) &
@@ -33,12 +33,7 @@ namespace ViewpointAPI.Repositories
 
             var referenceData = await _referenceCollection.Find(filter).FirstOrDefaultAsync();
 
-            if(referenceData == null) 
-            {
-                throw new CustomException("Reference data not found for specified criteria");
-            }
-
-            return referenceData;
+            return referenceData.Value;
         }
     }
 }

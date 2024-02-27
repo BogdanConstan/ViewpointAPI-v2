@@ -8,9 +8,9 @@ namespace ViewpointAPI.Services
 {
     public class CacheHydrationService : IHostedService
     {
-        private readonly IIdsService _idsService;
+        private readonly IdsService _idsService;
 
-        public CacheHydrationService(IIdsService idsService)
+        public CacheHydrationService(IdsService idsService)
         {
             _idsService = idsService ?? throw new ArgumentNullException(nameof(idsService));
         }

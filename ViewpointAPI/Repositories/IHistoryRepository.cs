@@ -3,6 +3,6 @@ namespace ViewpointAPI.Repositories
 {
     public interface IHistoryRepository 
     {
-        Task<List<History>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate);
+        Task<HistoryDataItems> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate);
     }
 }

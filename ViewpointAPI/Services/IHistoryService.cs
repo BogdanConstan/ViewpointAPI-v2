@@ -4,6 +4,6 @@ namespace ViewpointAPI.Services
 {
     public interface IHistoryService
     {
-        Task<HistoryResponse> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate);
+        Task<HistoryDataItems> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate);
     }
 }

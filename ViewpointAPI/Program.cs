@@ -17,15 +17,17 @@ builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSe
 builder.Services.AddSingleton<IHistoryService, HistoryService>();
 builder.Services.AddSingleton<IReferenceService, ReferenceService>();
 builder.Services.AddSingleton<IIdsService, IdsService>();
+builder.Services.AddSingleton<IdsService>(); // Used for preload cache method in CacheHydrationService
 
 builder.Services.AddSingleton<IHistoryRepository, HistoryRepository>();
 builder.Services.AddSingleton<IReferenceRepository, ReferenceRepository>();
 builder.Services.AddSingleton<IIdsRepository, IdsRepository>();
 
 builder.Services.AddMemoryCache();
+
 builder.Services.AddHostedService<CacheHydrationService>();
 
-builder.Services.AddSingleton<CustomException>();
+builder.Services.AddSingleton<IdNotFoundException>();
 
 builder.Services.AddControllers().AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
