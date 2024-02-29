@@ -57,7 +57,6 @@ namespace ViewpointAPI.Controllers
             }
             catch (IdNotFoundException ex)
             {
-                // Log the exception if needed
                 return StatusCode(400, ex.Message);
             }
         }
@@ -94,7 +93,6 @@ namespace ViewpointAPI.Controllers
             }
             catch (IdNotFoundException ex)
             {
-                // Log the exception if needed
                 return StatusCode(400, ex.Message);
             }
         }

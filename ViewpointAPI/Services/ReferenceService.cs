@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ViewpointAPI.Models;
 using ViewpointAPI.Repositories;
 using ViewpointAPI.Exceptions;
 
@@ -18,7 +17,6 @@ namespace ViewpointAPI.Services
 
         public async Task<string?> GetReference(string identifier, string field)
         {
-            // Add any additional business logic here if needed
             var globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
 
             if (globalIdentifier == null) 

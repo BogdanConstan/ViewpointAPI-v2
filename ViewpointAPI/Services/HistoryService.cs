@@ -21,7 +21,6 @@ namespace ViewpointAPI.Services
 
         public async Task<HistoryDataItems> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
-            // Add any additional business logic here if needed
             var globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
 
             if (globalIdentifier == null) 
