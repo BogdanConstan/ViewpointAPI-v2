@@ -19,37 +19,17 @@ namespace ViewpointAPI.Services
             _idsService = idsService ?? throw new ArgumentNullException(nameof(idsService));
         }
 
-        public async Task<HistoryResponse> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
+        public async Task<HistoryDataItems> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
-            // Add any additional business logic here if needed
             var globalIdentifier = await _idsService.GetGlobalIdentifier(identifier);
-            
+
             if (globalIdentifier == null) 
             {
-                throw new CustomException("Local Identifier not found in database");
+                throw new IdNotFoundException("Local identifier not found");
             }
 
-            else if (globalIdentifier == "null")
-            {
-                throw new CustomException("This local identifier was already queried in the last 24 hours and is not present in the database");
-            }
+            return await _historyRepository.GetHistory(globalIdentifier, field, startDate, endDate);
 
-            var historyData =  await _historyRepository.GetHistory(globalIdentifier, field, startDate, endDate);
-
-            var historyDataItems = historyData.Select(x => new HistoryDataItem
-            {
-                Timestamp = x.Timestamp,
-                Value = x.Value
-            }).ToList();
-
-            var response = new HistoryResponse
-            {
-                Identifier = identifier,
-                Field = field,
-                Data = historyDataItems
-            };
-
-            return response;
         }
     }
 }

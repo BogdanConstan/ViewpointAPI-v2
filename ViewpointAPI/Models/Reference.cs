@@ -6,7 +6,8 @@ namespace ViewpointAPI.Models
     public class Reference
     {
         [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement("identifier")]
         public string Identifier { get; set; }

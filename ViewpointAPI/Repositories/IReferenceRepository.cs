@@ -3,6 +3,6 @@ namespace ViewpointAPI.Repositories
 {
     public interface IReferenceRepository 
     {
-        Task<Reference> GetReference(string identifier, string field);
+        Task<string?> GetReference(string identifier, string field);
     }
 }

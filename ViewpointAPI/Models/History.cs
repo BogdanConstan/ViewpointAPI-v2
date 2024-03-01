@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Text.Json.Serialization;
 
 namespace ViewpointAPI.Models 
 {
@@ -11,7 +10,6 @@ namespace ViewpointAPI.Models
         public string Id { get; set; }
         
         [BsonElement("identifier")]
-        [JsonPropertyName("Identifier")]
         public string Identifier { get; set; }
 
         [BsonElement("field")]

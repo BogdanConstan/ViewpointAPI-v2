@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ViewpointAPI.Models
@@ -10,8 +9,8 @@ namespace ViewpointAPI.Models
 
         public string Field { get; set; }
 
-        public int Count => Data?.Count ?? 0;
+        public int Count => Data?.Items.Count ?? 0;
        
-        public List<HistoryDataItem> Data { get; set; }
+        public HistoryDataItems Data { get; set; }
     }
 }

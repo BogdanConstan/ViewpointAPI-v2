@@ -39,9 +39,6 @@ namespace ViewpointAPITests
             // Since querying happens in the repository, and the only function of this method is to call the repository's GetHistory() method, this is the only relevant assertion 
             // for now. 
             Assert.IsNotNull(result);
-            }
-
-
         }
     }
 }
