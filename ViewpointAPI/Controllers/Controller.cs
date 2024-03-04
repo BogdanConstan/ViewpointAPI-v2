@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ViewpointAPI.Models;
 using ViewpointAPI.Services;
 using ViewpointAPI.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ViewpointAPI.Controllers
 {
@@ -20,6 +21,7 @@ namespace ViewpointAPI.Controllers
             _referenceService = referenceService ?? throw new ArgumentNullException(nameof(referenceService));
         }
 
+        [Authorize]
         [HttpGet("history")]
         public async Task<ActionResult<HistoryResponse>> GetHistory(string identifier, string field, DateTime? startDate, DateTime? endDate)
         {
@@ -61,6 +63,7 @@ namespace ViewpointAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("reference")]
         public async Task<ActionResult<ReferenceResponse>> GetReference(string identifier, string field)
         {
