@@ -12,8 +12,10 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 //Jwt configuration starts here
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+DotEnv.Load();
+
+string jwtIssuer = Environment.GetEnvironmentVariable("ISSUER");
+string jwtKey = Environment.GetEnvironmentVariable("KEY");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
@@ -30,8 +32,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
      };
  });
 //Jwt configuration ends here
-
-DotEnv.Load();
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
@@ -95,7 +95,6 @@ builder.Services.ConfigureSwaggerGen(setup =>
         Version = "v1"
     });
 });
-
 
 var app = builder.Build();
 
