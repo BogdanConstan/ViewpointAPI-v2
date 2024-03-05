@@ -11,8 +11,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Jwt configuration starts here
 DotEnv.Load();
+
+//Jwt configuration starts here
 
 string jwtIssuer = Environment.GetEnvironmentVariable("ISSUER");
 string jwtKey = Environment.GetEnvironmentVariable("KEY");
@@ -33,9 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  });
 //Jwt configuration ends here
 
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 builder.Configuration["SecurityDatabase:ConnectionString"] = connectionString;
 
 builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSection("SecurityDatabase"));
