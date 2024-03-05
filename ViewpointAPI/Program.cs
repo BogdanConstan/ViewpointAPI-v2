@@ -12,10 +12,8 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 //Jwt configuration starts here
-DotEnv.Load();
-
-string jwtIssuer = Environment.GetEnvironmentVariable("ISSUER");
-string jwtKey = Environment.GetEnvironmentVariable("KEY");
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
@@ -33,7 +31,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  });
 //Jwt configuration ends here
 
+DotEnv.Load();
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 string connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRING");
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 builder.Configuration["SecurityDatabase:ConnectionString"] = connectionString;
 
 builder.Services.Configure<SecurityDatabaseSettings>(builder.Configuration.GetSection("SecurityDatabase"));
@@ -85,15 +87,28 @@ builder.Services.AddSwaggerGen(setup =>
 
 });
 
+builder.Services.ConfigureSwaggerGen(setup =>
+{
+    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "ViewpointAPI",
+        Version = "v1"
+    });
+});
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//app.UseSwagger();
+//app.UseSwaggerUI();
+//}
+
+// To enable Swagger in initial deployed version
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
