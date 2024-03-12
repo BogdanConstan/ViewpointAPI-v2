@@ -5,6 +5,6 @@ namespace ViewpointAPI.Models
 {
     public class HistoryDataItems
     {
-        public Dictionary<DateTime, double> Items { get; set; }
+        public Dictionary<string, double> Items { get; set; }
     }
 }

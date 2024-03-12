@@ -43,7 +43,7 @@ namespace ViewpointAPI.Repositories
 
             var historyDataItems = new HistoryDataItems {
                 Items = historyData.ToDictionary(
-                    data => data.Timestamp,
+                    data => data.Timestamp.Date.ToString("yyyy-MM-dd"),
                     data => data.Value
                 )
             };

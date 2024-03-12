@@ -10,7 +10,7 @@ namespace ViewpointAPI.Services
     {
         private readonly IIdsRepository _idsRepository;
         private readonly IMemoryCache _cache;
-        private readonly object _cacheLock = new object();
+        private readonly SemaphoreSlim _cacheLock = new SemaphoreSlim(1);
 
         public IdsService(IIdsRepository idsRepository, IMemoryCache memoryCache)
         {
@@ -23,41 +23,38 @@ namespace ViewpointAPI.Services
             identifier = identifier.Trim().ToUpper();
 
             string? globalIdentifier;
-            lock (_cacheLock)
+
+            if (!_cache.TryGetValue(identifier, out globalIdentifier))
             {
-                if (!_cache.TryGetValue(identifier, out globalIdentifier))
+                await _cacheLock.WaitAsync();
+                try
                 {
+                    if (!_cache.TryGetValue(identifier, out globalIdentifier))
+                    {
+                        globalIdentifier = await _idsRepository.GetGlobalIdentifier(identifier);
+                        SetNewCacheEntry(identifier, globalIdentifier);
+                    }
+                }
+                finally
+                {
+                    _cacheLock.Release(); // Release the lock
                 }
             }
-
-            if (globalIdentifier == null)
-            {
-                globalIdentifier = await _idsRepository.GetGlobalIdentifier(identifier);
-
-                lock (_cacheLock)
-                {
-                    SetNewCacheEntry(identifier, globalIdentifier);
-                }
-            }
-
             return globalIdentifier;
         }
 
         private async Task SetNewCacheEntry(string identifier, string globalIdentifier) 
         {
-            lock (_cacheLock)
+            if (globalIdentifier == null)
             {
-                if (globalIdentifier == null)
-                {
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromHours(1));
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromHours(1));
 
-                    _cache.Set(identifier, globalIdentifier, cacheEntryOptions);
-                }
-                else 
-                {
-                    _cache.Set(identifier, globalIdentifier);
-                }
+                _cache.Set(identifier, globalIdentifier, cacheEntryOptions);
+            }
+            else 
+            {
+                _cache.Set(identifier, globalIdentifier);
             }
         }
 
@@ -65,12 +62,9 @@ namespace ViewpointAPI.Services
         {
             var cacheInfo = await _idsRepository.GetAllIDs();
 
-            lock (_cacheLock)
+            foreach (var pair in cacheInfo)
             {
-                foreach (var pair in cacheInfo)
-                {
-                    _cache.Set(pair.Key, pair.Value);
-                }
+                _cache.Set(pair.Key, pair.Value);
             }
         }
     }
